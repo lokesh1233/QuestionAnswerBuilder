@@ -1,0 +1,65 @@
+version: "3"
+services:
+  speechtotext-dev:
+    container_name: speechtotext
+    restart: always
+    build:
+      dockerfile: dev.speechtotext.dockerfile
+      context: .
+    ports:
+      - "1070:1070"
+    command: ["python", "app.py"]
+    volumes:
+      - ./TSAudio:/app/TSAudio
+      - ./STAudio:/app/STAudio
+
+  qnachatbot:
+    restart: always
+    build:
+      dockerfile: dev.qnachatbot.dockerfile
+      context: .
+    ports:
+      - "5021:5021"
+    command: ["python", "app.py", "--debug"]
+    volumes:
+      - ./models:/app/models
+
+  dashboardapi:
+    restart: always
+    build:
+      dockerfile: dev.dashboardapi.dockerfile
+      context: .
+    ports:
+      - "5020:5020"
+    command: ["python", "app.py"]
+
+  dashboardqabotui:
+    restart: always
+    build:
+      dockerfile: dev.dashboardqabotui.dockerfile
+      context: .
+    ports:
+      - "5018:5018"
+
+  additionaljobs-dev:
+    container_name: additionaljobs
+    restart: always
+    build:
+      dockerfile: dev.additionaljobs.dockerfile
+      context: .
+    ports:
+      - "5050:5050"
+    command: ["python", "app.py"]
+
+  httpserver-dev:
+    container_name: httpserver
+    restart: always
+    build:
+      dockerfile: dev.httpserver.dockerfile
+      context: .
+    ports:
+      - "8888:8888"
+    command: ["python", "-m", "http.server", "8888"]
+    volumes:
+      - ./TSAudio:/app/TSAudio
+
